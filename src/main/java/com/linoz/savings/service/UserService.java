@@ -3,13 +3,13 @@ package com.linoz.savings.service;
 import com.linoz.savings.dto.UserPostDTO;
 import com.linoz.savings.dto.UserPutDTO;
 import com.linoz.savings.entity.User;
+import com.linoz.savings.exceptions.UserException;
+import com.linoz.savings.mapper.UserMapper;
 import com.linoz.savings.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import javax.ws.rs.BadRequestException;
 import java.util.List;
 
 /**
@@ -24,14 +24,9 @@ public class UserService {
 
     public User addUser(UserPostDTO userPostDTO) {
         if (findUserByEmail(userPostDTO.getEmail()) != null) {
-            throw new EntityExistsException("e-mail existente na base");
+            throw new UserException("e-mail existente na base");
         }
-        User user = User.builder()
-                .name(userPostDTO.getName())
-                .email(userPostDTO.getEmail())
-                .cellphone(userPostDTO.getCellphone())
-                .build();
-        return repository.save(user);
+        return repository.save(UserMapper.INSTANCE.toUser(userPostDTO));
     }
 
     public List<User> findAllUsers() {
@@ -40,17 +35,13 @@ public class UserService {
 
     public User findUserByIdOrThrowBadRequestException(long id) {
         return repository.findById(id)
-                .orElseThrow(BadRequestException::new);
+                .orElseThrow(()-> new UserException("User not found"));
     }
 
     public User updateUser(UserPutDTO userPutDTO) {
         User savedUser = findUserByIdOrThrowBadRequestException(userPutDTO.getId());
-        User user = User.builder()
-                .id(savedUser.getId())
-                .name(userPutDTO.getName())
-                .email(userPutDTO.getEmail())
-                .cellphone(userPutDTO.getCellphone())
-                .build();
+        User user = UserMapper.INSTANCE.toUser(userPutDTO);
+        user.setId(savedUser.getId());
         return repository.save(user);
     }
 
