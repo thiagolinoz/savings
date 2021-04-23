@@ -6,7 +6,6 @@ import com.linoz.savings.entity.User;
 import com.linoz.savings.exceptions.UserException;
 import com.linoz.savings.mapper.UserMapper;
 import com.linoz.savings.repository.UserRepository;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import java.util.List;
  * Created by linoz on 2/15/21
  */
 @Service
-@Log4j2
 public class UserService {
 
     @Autowired
