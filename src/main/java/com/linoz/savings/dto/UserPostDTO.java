@@ -1,6 +1,7 @@
 package com.linoz.savings.dto;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
 
