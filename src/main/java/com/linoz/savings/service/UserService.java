@@ -7,6 +7,8 @@ import com.linoz.savings.exceptions.UserException;
 import com.linoz.savings.mapper.UserMapper;
 import com.linoz.savings.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,8 @@ public class UserService {
         return repository.save(UserMapper.INSTANCE.toUser(userPostDTO));
     }
 
-    public List<User> findAllUsers() {
-         return repository.findAll();
+    public Page<User> findAllUsers(Pageable pageable) {
+         return repository.findAll(pageable);
     }
 
     public User findUserByIdOrThrowBadRequestException(long id) {

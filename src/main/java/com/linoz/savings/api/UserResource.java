@@ -6,6 +6,8 @@ import com.linoz.savings.entity.User;
 import com.linoz.savings.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Created by linoz on 2/8/21
@@ -41,8 +42,8 @@ public class UserResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok(service.findAllUsers());
+    public ResponseEntity<Page<User>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(service.findAllUsers(pageable));
     }
 
     @GetMapping(path = "/user/{id}")
